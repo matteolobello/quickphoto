@@ -14,4 +14,5 @@
     <string name="ok">OK</string>
     <string name="done">Done!</string>
     <string name="add_at_least_one_shortcut_please">Add at least one shortcut, please</string>
+    <string name="permissins_error">Please grant permissions first</string>
 </resources>

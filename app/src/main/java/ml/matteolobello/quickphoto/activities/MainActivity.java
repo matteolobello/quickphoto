@@ -1,14 +1,18 @@
 package ml.matteolobello.quickphoto.activities;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_IMAGES_RESULT_CODE = 505;
 
     /**
+     * Result code used when requesting permissions.
+     */
+    private static final int PERMISSIONS_REQUEST_CODE = 212;
+
+    /**
      * The Views.
      */
     private Toolbar mToolbar;
@@ -58,35 +67,11 @@ public class MainActivity extends AppCompatActivity {
         initViews();
     }
 
-    @SuppressWarnings("all")
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onResume() {
+        super.onResume();
 
-        if (requestCode == PICK_IMAGES_RESULT_CODE && resultCode == RESULT_OK && data != null) {
-            Uri uri = data.getData();
-
-            // Add permissions as the Uri we got will be temporary with API19+
-            int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
-            getApplicationContext().getContentResolver().takePersistableUriPermission(uri, takeFlags);
-
-            Bitmap originalPreview = BitmapUtils.getBitmapFromUri(getApplicationContext(), uri);
-
-            int originalPreviewWidth = originalPreview.getWidth();
-            int originalPreviewHeight = originalPreview.getHeight();
-
-            // Optimize Bitmap
-            // originalPreviewWidth : originalPreviewHeight = x : mPreviewImageViewHeight
-            mPreviewImageView.setImageBitmap(BitmapUtils.scaleCenterCrop(originalPreview,
-                    originalPreviewWidth * originalPreview.getHeight() / originalPreviewHeight,
-                    mPreviewImageView.getHeight()));
-
-            mApplyButton.setAlpha(1.0f);
-            mApplyButton.setTextColor(Color.WHITE);
-            mApplyButton.setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
-
-            mSelectedPhoto = new Photo(uri);
-        }
+        handlePermissions();
     }
 
     @Override
@@ -130,6 +115,51 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("all")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGES_RESULT_CODE && resultCode == RESULT_OK && data != null) {
+            Uri uri = data.getData();
+
+            // Add permissions as the Uri we got will be temporary with API19+
+            int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+            getApplicationContext().getContentResolver().takePersistableUriPermission(uri, takeFlags);
+
+            Bitmap originalPreview = BitmapUtils.getBitmapFromUri(getApplicationContext(), uri);
+
+            int originalPreviewWidth = originalPreview.getWidth();
+            int originalPreviewHeight = originalPreview.getHeight();
+
+            // Optimize Bitmap
+            // originalPreviewWidth : originalPreviewHeight = x : mPreviewImageViewHeight
+            mPreviewImageView.setImageBitmap(BitmapUtils.scaleCenterCrop(originalPreview,
+                    originalPreviewWidth * originalPreview.getHeight() / originalPreviewHeight,
+                    mPreviewImageView.getHeight()));
+
+            mApplyButton.setAlpha(1.0f);
+            mApplyButton.setTextColor(Color.WHITE);
+            mApplyButton.setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));
+
+            mSelectedPhoto = new Photo(uri);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSIONS_REQUEST_CODE) {
+            // There is only one permission, so let's use 0 as index
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, R.string.permissins_error, Toast.LENGTH_SHORT).show();
+
+                finish();
+            }
+        }
     }
 
     /**
@@ -182,6 +212,16 @@ public class MainActivity extends AppCompatActivity {
                 ShortcutHelper.get(MainActivity.this).addHomeScreenShortcut(mSelectedPhoto);
             }
         });
+    }
+
+    /**
+     * Handle MarshMallow Permissions
+     */
+    private void handlePermissions() {
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_CODE);
+        }
     }
 
     /**
