@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">QuickPhoto</string>
+    <string name="pick_photos">Pick photo...</string>
+    <string name="shortcut_name_hint">Shortcut name</string>
+    <string name="shortcut_created">Shortcut \"%s\" created :)</string>
+    <string name="select_photo">Select photo</string>
+    <string name="apply">Apply</string>
+    <string name="select_photo_first_please">Select a photo first, please</string>
+    <string name="insert_name_first_please">Insert name first, please</string>
+    <string name="reset">Reset icon shortcuts</string>
+    <string name="warning">Warning</string>
+    <string name="shortcuts_remove_message">You will remove all icon shortcuts, that are shown when longpressing an icon.</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="ok">OK</string>
+    <string name="done">Done!</string>
+    <string name="add_at_least_one_shortcut_please">Add at least one shortcut, please</string>
+</resources>
