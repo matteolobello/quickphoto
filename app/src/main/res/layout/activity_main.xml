@@ -91,15 +91,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/apply"
-                android:background="?attr/selectableItemBackground"
+                android:background="@null"
                 android:layout_below="@id/text_input_layout"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
-                android:textColor="@android:color/black"
-                android:alpha="0.6"
-                android:foreground="@drawable/selectable_item_background"
-                app:elevation="8dp"/>
+                android:textColor="@color/colorDisabledButtonText" />
 
         </RelativeLayout>
 

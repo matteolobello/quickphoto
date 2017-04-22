@@ -3,7 +3,7 @@
     <color name="colorPrimary">#434243</color>
     <color name="colorPrimaryDark">#363536</color>
     <color name="colorAccent">#00AA8D</color>
-
-    <color name="colorSelectPhotoItemBackground">#e3e3e3</color>
-    <color name="colorBackground">#eeeeee</color>
+    <color name="colorBackground">#EEEEEE</color>
+    <color name="colorSelectPhotoItemBackground">#AFAFAF</color>
+    <color name="colorDisabledButtonText">#BDBDBD</color>
 </resources>
