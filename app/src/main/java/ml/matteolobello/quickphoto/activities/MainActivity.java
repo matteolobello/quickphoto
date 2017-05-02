@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -24,6 +23,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import ml.matteolobello.quickphoto.R;
 import ml.matteolobello.quickphoto.pojo.Photo;
@@ -46,12 +48,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The Views.
      */
-    private Toolbar mToolbar;
-    private ImageView mPreviewImageView;
-    private TextInputEditText mEditText;
-    private TextInputLayout mTextInputLayout;
-    private View mSelectPhotoView;
-    private Button mApplyButton;
+    @BindView(R.id.toolbar)                   protected Toolbar           mToolbar;
+    @BindView(R.id.selected_image_image_view) protected ImageView         mPreviewImageView;
+    @BindView(R.id.edit_text)                 protected TextInputEditText mEditText;
+    @BindView(R.id.text_input_layout)         protected TextInputLayout   mTextInputLayout;
+    @BindView(R.id.select_photo)              protected View              mSelectPhotoView;
+    @BindView(R.id.apply)                     protected Button            mApplyButton;
 
     /**
      * The current selected Photo object.
@@ -63,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViews();
+        ButterKnife.bind(this);
+
         initViews();
     }
 
@@ -129,16 +132,7 @@ public class MainActivity extends AppCompatActivity {
             int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
             getApplicationContext().getContentResolver().takePersistableUriPermission(uri, takeFlags);
 
-            Bitmap originalPreview = BitmapUtils.getBitmapFromUri(getApplicationContext(), uri);
-
-            int originalPreviewWidth = originalPreview.getWidth();
-            int originalPreviewHeight = originalPreview.getHeight();
-
-            // Optimize Bitmap
-            // originalPreviewWidth : originalPreviewHeight = x : mPreviewImageViewHeight
-            mPreviewImageView.setImageBitmap(BitmapUtils.scaleCenterCrop(originalPreview,
-                    originalPreviewWidth * originalPreview.getHeight() / originalPreviewHeight,
-                    mPreviewImageView.getHeight()));
+            mPreviewImageView.setImageBitmap(BitmapUtils.getBitmapFromUri(getApplicationContext(), uri));
 
             mApplyButton.setForeground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.selectable_item_background));
             mApplyButton.setAlpha(1.0f);
@@ -161,18 +155,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
-    }
-
-    /**
-     * Find all the layout Views we need to use.
-     */
-    private void findViews() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mPreviewImageView = (ImageView) findViewById(R.id.selected_image_image_view);
-        mEditText = (TextInputEditText) findViewById(R.id.edit_text);
-        mTextInputLayout = (TextInputLayout) findViewById(R.id.text_input_layout);
-        mSelectPhotoView = findViewById(R.id.select_photo);
-        mApplyButton = (Button) findViewById(R.id.apply);
     }
 
     /**

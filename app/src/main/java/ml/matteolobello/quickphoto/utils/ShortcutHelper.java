@@ -49,7 +49,6 @@ public class ShortcutHelper {
 
     /**
      * A method to get a new Instance of this class.
-     * Avoid using a singleton as we could get a memory leak.
      *
      * @param activity The Activity we're using.
      * @return A new Instance of this Class.

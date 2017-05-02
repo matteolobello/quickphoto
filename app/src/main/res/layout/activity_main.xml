@@ -52,7 +52,8 @@
                 android:text="@string/select_photo"
                 android:textSize="26sp"
                 android:translationX="16dp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                tools:ignore="RelativeOverlap" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="28dp"
@@ -66,8 +67,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/select_photo"
-            android:elevation="8dp">
+            android:layout_below="@id/select_photo">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/text_input_layout"
