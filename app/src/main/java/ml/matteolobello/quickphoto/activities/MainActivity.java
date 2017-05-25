@@ -134,7 +134,9 @@ public class MainActivity extends AppCompatActivity {
 
             mPreviewImageView.setImageBitmap(BitmapUtils.getBitmapFromUri(getApplicationContext(), uri));
 
-            mApplyButton.setForeground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.selectable_item_background));
+            if (SDKUtils.AT_LEAST_MARSHMALLOW) {
+                mApplyButton.setForeground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.selectable_item_background));
+            }
             mApplyButton.setAlpha(1.0f);
             mApplyButton.setTextColor(Color.WHITE);
             mApplyButton.setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)));

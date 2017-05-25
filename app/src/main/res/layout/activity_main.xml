@@ -81,6 +81,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
+                    android:maxLines="1"
+                    android:inputType="text"
                     android:hint="@string/shortcut_name_hint"
                     android:textColorHint="@android:color/white" />
 
